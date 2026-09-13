@@ -31,7 +31,7 @@ export default async function SupportPage() {
           </WhatsAppLink>
         </div>
 
-        <div className="mt-14 rounded-3xl border border-mist-200 bg-white p-8 sm:p-10">
+        <div className="mt-14 border-t-2 border-navy-950 bg-white p-8 sm:p-10">
           <h2 className="text-xl font-bold tracking-tight text-ink">Request a Quote</h2>
           <div className="mt-6">
             <QuoteForm whatsappNumber={settings.whatsapp} />
@@ -41,7 +41,7 @@ export default async function SupportPage() {
         {supportFaqs.length > 0 ? (
           <div className="mt-16">
             <h2 className="text-xl font-bold tracking-tight text-ink">Common Questions</h2>
-            <div className="mt-6 divide-y divide-mist-200 rounded-2xl border border-mist-200 bg-white">
+            <div className="mt-6 divide-y divide-mist-200 border-y-2 border-navy-950 bg-white">
               {supportFaqs.map((f) => (
                 <details key={f.id} className="p-5">
                   <summary className="cursor-pointer text-sm font-semibold text-ink">{f.question}</summary>

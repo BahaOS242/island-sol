@@ -33,11 +33,11 @@ export default async function ProductsPage({
           subtitle="Portable power stations and backup energy systems for homes and businesses across The Bahamas."
         />
 
-        <div className="mt-8 flex flex-wrap gap-2">
+        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 border-b border-mist-300">
           <Link
             href="/products"
-            className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-              !activeCategory ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
+            className={`border-b-2 pb-3 text-sm font-semibold uppercase tracking-[0.1em] ${
+              !activeCategory ? "border-navy-950 text-navy-950" : "border-transparent text-slate-500"
             }`}
           >
             All
@@ -46,8 +46,8 @@ export default async function ProductsPage({
             <Link
               key={c.id}
               href={`/products?category=${c.id}`}
-              className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-                activeCategory === c.id ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
+              className={`border-b-2 pb-3 text-sm font-semibold uppercase tracking-[0.1em] ${
+                activeCategory === c.id ? "border-navy-950 text-navy-950" : "border-transparent text-slate-500"
               }`}
             >
               {c.name}

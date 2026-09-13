@@ -36,7 +36,7 @@ export default function HowItWorksPage() {
       </div>
 
       <Container className="mt-16">
-        <div className="rounded-3xl border border-mist-200 bg-white p-8 sm:p-10">
+        <div className="border-l-2 border-gold-500 bg-cream-100 p-8 sm:p-10">
           <h2 className="text-2xl font-bold tracking-tight text-ink">Less to deal with than a generator.</h2>
           <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {EFFORT_POINTS.map((point) => (

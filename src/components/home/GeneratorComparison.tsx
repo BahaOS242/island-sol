@@ -13,19 +13,16 @@ export function GeneratorComparison() {
         />
 
         <div className="mt-10 overflow-x-auto">
-          <div className="min-w-[560px] rounded-3xl border border-mist-200">
-            <div className="grid grid-cols-3 border-b border-mist-200 bg-cream-100 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="min-w-[560px] border-t-2 border-navy-950">
+            <div className="grid grid-cols-3 border-b border-mist-300 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
               <div className="p-4"> </div>
               <div className="p-4">Fuel Generator</div>
               <div className="p-4 text-navy-900">Power Station</div>
             </div>
-            {GENERATOR_COMPARISON.map((row, i) => (
-              <div
-                key={row.label}
-                className={`grid grid-cols-3 text-sm ${i % 2 === 0 ? "bg-white" : "bg-cream-50"}`}
-              >
+            {GENERATOR_COMPARISON.map((row) => (
+              <div key={row.label} className="grid grid-cols-3 border-b border-mist-200 text-sm">
                 <div className="p-4 font-semibold text-ink">{row.label}</div>
-                <div className="p-4 text-slate-600">{row.generator}</div>
+                <div className="p-4 text-slate-500">{row.generator}</div>
                 <div className="p-4 text-slate-800">{row.powerStation}</div>
               </div>
             ))}

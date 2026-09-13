@@ -27,17 +27,17 @@ export default async function TradeInPage() {
           subtitle="Already own an ISLAND SOL power station and need more capacity? Trade it in toward a larger system."
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mt-14 grid grid-cols-1 gap-8 border-t border-mist-300 pt-8 sm:grid-cols-3 sm:gap-6">
           {STEPS.map((step, i) => (
-            <div key={step.title} className="rounded-2xl border border-mist-200 bg-white p-6">
-              <span className="text-sm font-bold text-gold-600">0{i + 1}</span>
+            <div key={step.title} className="sm:border-l sm:border-mist-300 sm:pl-6 sm:first:border-l-0 sm:first:pl-0">
+              <span className="font-mono text-sm text-gold-600">0{i + 1}</span>
               <h3 className="mt-2 text-base font-bold text-ink">{step.title}</h3>
               <p className="mt-2 text-sm text-slate-600">{step.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-14 rounded-3xl border border-mist-200 bg-white p-8 sm:p-10">
+        <div className="mt-14 border-t-2 border-navy-950 bg-white p-8 sm:p-10">
           <h2 className="text-xl font-bold tracking-tight text-ink">Start a Trade-In</h2>
           <div className="mt-6">
             <TradeInForm whatsappNumber={settings.whatsapp} />

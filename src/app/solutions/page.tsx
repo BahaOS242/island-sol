@@ -25,35 +25,26 @@ export default async function SolutionsPage() {
           subtitle="Every home and business has a different amount to keep running. These are the ways ISLAND SOL scales to meet that."
         />
 
-        <div className="mt-14 space-y-14">
+        <div className="mt-14 divide-y divide-mist-300 border-t border-mist-300">
           {solutions.map((solution, i) => {
             const cta = solutionCta(solution);
             return (
-              <div
-                key={solution.id}
-                className="grid grid-cols-1 items-center gap-8 rounded-3xl border border-mist-200 bg-white p-8 sm:p-10 lg:grid-cols-2"
-              >
+              <div key={solution.id} className="grid grid-cols-1 items-center gap-8 py-14 lg:grid-cols-2">
                 <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turquoise-600">
-                    Tier {i + 1}
-                  </p>
-                  <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                  <p className="font-mono text-sm text-turquoise-700">0{i + 1}</p>
+                  <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                     {solution.solutionName}
                   </h2>
-                  <p className="mt-4 text-base leading-relaxed text-slate-600">{solution.description}</p>
-                  <Button href={cta.href} variant="primary" className="mt-6">
+                  <p className="mt-4 max-w-md text-base leading-relaxed text-slate-600">{solution.description}</p>
+                  <Button href={cta.href} variant="primary" className="mt-7">
                     {cta.label}
                   </Button>
                 </div>
                 <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Built for:</p>
-                  <ul className="mt-3 grid grid-cols-2 gap-2">
-                    {solution.commonAppliances.map((example) => (
-                      <li key={example} className="rounded-xl bg-cream-100 px-4 py-3 text-sm text-slate-700">
-                        {example}
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Built for</p>
+                  <p className="mt-3 text-lg leading-relaxed text-slate-700">
+                    {solution.commonAppliances.join(" · ")}
+                  </p>
                 </div>
               </div>
             );

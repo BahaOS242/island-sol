@@ -12,7 +12,7 @@ export function ResultCard({ result, solutions }: { result: CalculatorResult; so
   const cta = matched ? solutionCta(matched) : { label: "Talk to ISLAND SOL", href: "/support" };
 
   return (
-    <div className="rounded-3xl border border-navy-800 bg-navy-950 p-6 text-cream-50 sm:p-8">
+    <div className="border-t-2 border-gold-500 bg-navy-950 p-6 text-cream-50 sm:p-8">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-500">
         Your Recommended System
       </p>

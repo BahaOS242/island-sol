@@ -6,7 +6,7 @@
 export function ProductImagePlaceholder({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex items-center justify-center rounded-2xl bg-gradient-to-br from-navy-900 to-navy-950 ${className}`}
+      className={`flex items-center justify-center bg-navy-950 ${className}`}
     >
       <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <rect x="14" y="18" width="36" height="30" rx="6" stroke="var(--color-gold-500)" strokeWidth="2" />

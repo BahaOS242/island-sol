@@ -11,7 +11,7 @@ export async function FAQ() {
       <Container className="max-w-3xl">
         <SectionHeading title="FREQUENTLY ASKED QUESTIONS" align="center" className="mx-auto" />
 
-        <div className="mt-10 divide-y divide-mist-300 rounded-3xl border border-mist-200 bg-white">
+        <div className="mt-10 divide-y divide-mist-300 border-y-2 border-navy-950 bg-white">
           {items.map((item) => (
             <details key={item.id} className="group p-6 open:bg-cream-50/60">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-ink">

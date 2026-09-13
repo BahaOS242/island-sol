@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 const FIELD_CLASSES =
-  "w-full rounded-xl border border-mist-300 bg-white px-4 py-3 text-sm text-ink placeholder:text-slate-400 focus:border-turquoise-500";
+  "w-full border border-mist-300 bg-white px-4 py-3 text-sm text-ink placeholder:text-slate-400 focus:border-turquoise-500";
 
 export function FormField({
   label,

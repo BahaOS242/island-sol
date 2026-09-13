@@ -15,24 +15,24 @@ const ROWS: { label: string; render: (p: Product) => string }[] = [
  */
 export function ComparisonTable({ products }: { products: Product[] }) {
   return (
-    <div className="overflow-x-auto rounded-3xl border border-mist-200">
+    <div className="overflow-x-auto border-t-2 border-navy-950">
       <table className="w-full min-w-[600px] border-collapse text-sm">
         <thead>
-          <tr className="bg-cream-100 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <th className="p-4"> </th>
+          <tr className="text-left text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            <th className="border-b border-mist-300 p-4"> </th>
             {products.map((p) => (
-              <th key={p.productId} className="p-4 text-navy-900">
+              <th key={p.productId} className="border-b border-mist-300 p-4 text-navy-900">
                 {p.name}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {ROWS.map((row, i) => (
-            <tr key={row.label} className={i % 2 === 0 ? "bg-white" : "bg-cream-50"}>
-              <td className="p-4 font-semibold text-ink">{row.label}</td>
+          {ROWS.map((row) => (
+            <tr key={row.label}>
+              <td className="border-b border-mist-200 p-4 font-semibold text-ink">{row.label}</td>
               {products.map((p) => (
-                <td key={p.productId} className="p-4 text-slate-700">
+                <td key={p.productId} className="border-b border-mist-200 p-4 font-mono text-slate-700">
                   {row.render(p)}
                 </td>
               ))}

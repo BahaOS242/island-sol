@@ -82,7 +82,7 @@ export default async function ProductDetailPage({
                 alt={product.name}
                 width={800}
                 height={600}
-                className="aspect-[4/3] w-full rounded-3xl object-cover"
+                className="aspect-[4/3] w-full object-cover"
                 priority
               />
             ) : (
@@ -129,13 +129,9 @@ export default async function ProductDetailPage({
         {/* What can it power */}
         <section className="mt-20">
           <h2 className="text-2xl font-bold tracking-tight text-ink">What Can It Power?</h2>
-          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {product.idealFor.map((item) => (
-              <li key={item} className="rounded-xl border border-mist-200 bg-white px-4 py-3 text-sm text-slate-700">
-                {item}
-              </li>
-            ))}
-          </ul>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-700">
+            {product.idealFor.join(" · ")}
+          </p>
         </section>
 
         {/* Runtime */}
@@ -154,7 +150,7 @@ export default async function ProductDetailPage({
         {/* Key specifications */}
         <section className="mt-16">
           <h2 className="text-2xl font-bold tracking-tight text-ink">Key Specifications</h2>
-          <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-mist-200 bg-mist-200 sm:grid-cols-2">
+          <dl className="mt-4 grid grid-cols-1 border-t-2 border-navy-950 sm:grid-cols-2">
             {[
               ["Capacity", product.capacityWh ? `${product.capacityWh} Wh` : "Coming soon"],
               ["Continuous Output", product.continuousOutputW ? `${product.continuousOutputW} W` : "Coming soon"],
@@ -163,9 +159,9 @@ export default async function ProductDetailPage({
               ["Dimensions", product.dimensions ?? "Coming soon"],
               ["Warranty", product.warranty ?? "Contact us for current warranty details"],
             ].map(([label, value]) => (
-              <div key={label} className="bg-white p-5">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
-                <dd className="mt-1 text-sm font-medium text-ink">{value}</dd>
+              <div key={label} className="border-b border-mist-200 py-4 sm:odd:pr-6 sm:even:pl-6 sm:even:border-l">
+                <dt className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">{label}</dt>
+                <dd className="mt-1 font-mono text-sm font-medium text-ink">{value}</dd>
               </div>
             ))}
           </dl>
@@ -174,9 +170,9 @@ export default async function ProductDetailPage({
         {/* Charging */}
         <section className="mt-16">
           <h2 className="text-2xl font-bold tracking-tight text-ink">Charging</h2>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
             {product.chargingMethods.map((method) => (
-              <span key={method} className="rounded-full bg-navy-950 px-4 py-2 text-sm font-medium text-cream-50">
+              <span key={method} className="text-sm font-semibold text-ink">
                 {CHARGING_LABELS[method] ?? method}
               </span>
             ))}
@@ -199,7 +195,7 @@ export default async function ProductDetailPage({
           )}
         </section>
 
-        <div className="mt-20 rounded-3xl bg-navy-950 p-10 text-center text-cream-50">
+        <div className="mt-20 bg-navy-950 p-10 text-center text-cream-50">
           <p className="text-lg font-semibold">Still deciding?</p>
           <p className="mt-2 text-sm text-cream-50/70">
             Talk to ISLAND SOL directly and we&rsquo;ll help you find the right fit.

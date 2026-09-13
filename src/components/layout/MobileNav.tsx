@@ -41,14 +41,14 @@ export function MobileNav({
             <Link
               href={primaryCta.href}
               onClick={() => setOpen(false)}
-              className="rounded-2xl bg-gold-500 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-navy-950"
+              className="bg-gold-500 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-navy-950"
             >
               {primaryCta.label}
             </Link>
             <Link
               href={SECONDARY_CTA.href}
               onClick={() => setOpen(false)}
-              className="mt-3 rounded-2xl border border-cream-50/25 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-cream-50"
+              className="mt-3 border border-cream-50/25 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-cream-50"
             >
               {SECONDARY_CTA.label}
             </Link>
@@ -57,7 +57,7 @@ export function MobileNav({
               onClick={() => setOpen(false)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 rounded-2xl border border-turquoise-500/40 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-turquoise-400"
+              className="mt-3 border border-turquoise-500/40 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-turquoise-400"
             >
               WhatsApp / Contact
             </a>

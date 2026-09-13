@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/Button";
 import { getSolutions } from "@/lib/data/solutions";
 import { solutionCta } from "@/lib/solutionCta";
 
+/**
+ * An editorial numbered list, not three identical bordered cards — each
+ * row is full-width with a large index numeral, asymmetric internal
+ * columns, and a thin rule separator. See brand guidelines against
+ * repeating the same card three times.
+ */
 export async function PowerSolutions() {
   const solutions = await getSolutions();
   if (solutions.length === 0) return null;
@@ -17,30 +23,28 @@ export async function PowerSolutions() {
           subtitle="From keeping your essentials running to backing up your home or business, find the system that fits the job."
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-14 border-t border-mist-300">
           {solutions.map((solution, i) => {
             const cta = solutionCta(solution);
             return (
               <div
                 key={solution.id}
-                className="flex flex-col rounded-3xl border border-mist-200 bg-white p-8 shadow-[0_1px_2px_rgba(10,13,18,0.04)]"
+                className="grid grid-cols-1 gap-6 border-b border-mist-300 py-10 sm:grid-cols-[auto_1fr] sm:gap-10 lg:grid-cols-[auto_1fr_1fr_auto] lg:items-center"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turquoise-600">
-                  Tier {i + 1}
+                <span className="font-mono text-sm text-slate-400">0{i + 1}</span>
+
+                <div className="lg:max-w-sm">
+                  <h3 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+                    {solution.solutionName}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{solution.description}</p>
+                </div>
+
+                <p className="text-sm leading-relaxed text-slate-500 lg:text-right">
+                  {solution.commonAppliances.join(" · ")}
                 </p>
-                <h3 className="mt-3 text-2xl font-bold tracking-tight text-ink">{solution.solutionName}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{solution.description}</p>
 
-                <ul className="mt-6 space-y-2">
-                  {solution.commonAppliances.map((example) => (
-                    <li key={example} className="flex items-center gap-2 text-sm text-slate-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-gold-500" />
-                      {example}
-                    </li>
-                  ))}
-                </ul>
-
-                <Button href={cta.href} variant="secondary" className="mt-8 text-ink self-start">
+                <Button href={cta.href} variant="secondary" className="text-ink self-start lg:justify-self-end">
                   {cta.label}
                 </Button>
               </div>

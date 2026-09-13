@@ -9,12 +9,14 @@ export async function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-navy-950 text-cream-50">
+      {/*
+        One restrained motif, not a decorative wash: a thin horizon line
+        low in the frame, referencing island light rather than a literal
+        beach scene. No blurred glow, no gradient blob.
+      */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 15% 0%, rgba(242,184,75,0.10), transparent), radial-gradient(50% 50% at 90% 100%, rgba(47,215,196,0.10), transparent)",
-        }}
+        className="pointer-events-none absolute inset-x-0 bottom-[18%] h-px opacity-40"
+        style={{ background: "linear-gradient(90deg, transparent, var(--color-gold-500), transparent)" }}
         aria-hidden="true"
       />
 
@@ -30,21 +32,21 @@ export async function Hero() {
         as a single `next/image` and let the browser cache dedupe the two
         instances rather than reintroducing fragile grid-row spanning.
       */}
-      <Container className="relative grid grid-cols-1 items-center gap-12 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
+      <Container className="relative grid grid-cols-1 items-center gap-16 py-20 sm:py-24 lg:grid-cols-[1.05fr_1fr] lg:py-32">
         <div>
           <Eyebrow>{hero.eyebrow}</Eyebrow>
 
-          <h1 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 max-w-xl text-[2.75rem] font-bold leading-[0.98] tracking-tight sm:text-6xl lg:text-[4.25rem]">
             {hero.headline}
           </h1>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream-50/75">{hero.subheadline}</p>
+          <p className="mt-7 max-w-md text-lg leading-relaxed text-cream-50/70">{hero.subheadline}</p>
 
-          <div className="mt-8 lg:hidden">
+          <div className="mt-9 lg:hidden">
             <HeroProductVisual />
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Button href={hero.primaryCtaLink} variant="primary" size="lg">
               {hero.primaryCtaLabel}
             </Button>
@@ -53,7 +55,9 @@ export async function Hero() {
             </Button>
           </div>
 
-          <p className="mt-6 text-sm font-medium tracking-wide text-cream-50/50">{hero.trustText}</p>
+          <p className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-cream-50/40">
+            {hero.trustText}
+          </p>
         </div>
 
         <div className="hidden lg:block">

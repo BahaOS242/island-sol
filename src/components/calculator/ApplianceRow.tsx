@@ -15,8 +15,8 @@ export function ApplianceRow({
 
   return (
     <div
-      className={`flex items-center justify-between gap-4 rounded-2xl border px-4 py-3 transition-colors ${
-        active ? "border-gold-500/60 bg-gold-500/5" : "border-mist-200 bg-white"
+      className={`flex items-center justify-between gap-4 border-l-2 px-4 py-3 transition-colors ${
+        active ? "border-l-gold-500 bg-gold-500/5" : "border-l-mist-200 bg-white"
       }`}
     >
       <span className="text-sm font-medium text-ink">{appliance.label}</span>

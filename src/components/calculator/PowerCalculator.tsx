@@ -54,7 +54,7 @@ export function PowerCalculator({
         {hasSelections ? (
           <ResultCard result={result} solutions={solutions} />
         ) : (
-          <div className="rounded-3xl border border-dashed border-mist-300 p-8 text-center">
+          <div className="border border-dashed border-mist-300 p-8 text-center">
             <p className="text-sm text-slate-500">
               Select what you need to power to see your recommended system.
             </p>
