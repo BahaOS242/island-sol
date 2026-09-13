@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0a0d12;
+
+  --color-navy-950: #081321;
+  --color-navy-900: #0d1f33;
+  --color-navy-800: #142b45;
+  --color-navy-700: #1d3a5c;
+  --color-navy-600: #2a4d76;
+
+  --color-gold-300: #f8d488;
+  --color-gold-400: #f5c766;
+  --color-gold-500: #f2b84b;
+  --color-gold-600: #de9e2e;
+  --color-gold-700: #b87f22;
+
+  --color-turquoise-300: #8fece1;
+  --color-turquoise-400: #56e2d1;
+  --color-turquoise-500: #2fd7c4;
+  --color-turquoise-600: #1fb8a6;
+  --color-turquoise-700: #17998a;
+
+  --color-cream-50: #faf8f3;
+  --color-cream-100: #f3efe4;
+
+  --color-mist-200: #e7e3d8;
+  --color-mist-300: #d8d3c4;
+  --color-mist-400: #c9c3b4;
+
+  --color-slate-500: #5b6472;
+  --color-slate-600: #47505c;
+  --color-slate-700: #333b45;
+
+  --background: var(--color-cream-50);
+  --foreground: var(--color-ink);
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-navy-700: var(--color-navy-700);
+  --color-navy-600: var(--color-navy-600);
+
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+
+  --color-turquoise-300: var(--color-turquoise-300);
+  --color-turquoise-400: var(--color-turquoise-400);
+  --color-turquoise-500: var(--color-turquoise-500);
+  --color-turquoise-600: var(--color-turquoise-600);
+  --color-turquoise-700: var(--color-turquoise-700);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+
+  --color-mist-200: var(--color-mist-200);
+  --color-mist-300: var(--color-mist-300);
+  --color-mist-400: var(--color-mist-400);
+
+  --color-slate-500: var(--color-slate-500);
+  --color-slate-600: var(--color-slate-600);
+  --color-slate-700: var(--color-slate-700);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--color-gold-400);
+  color: var(--color-navy-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-turquoise-500);
+  outline-offset: 2px;
+}
