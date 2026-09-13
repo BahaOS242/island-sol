@@ -11,7 +11,7 @@ import { buildWhatsAppLink } from "@/lib/constants";
  * QuoteRequest data model — swap the submit handler for a real POST once
  * a backend (Wix Data / CRM) exists.
  */
-export function QuoteForm() {
+export function QuoteForm({ whatsappNumber }: { whatsappNumber?: string }) {
   const [form, setForm] = useState({
     name: "",
     contact: "",
@@ -42,7 +42,7 @@ export function QuoteForm() {
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        window.open(buildWhatsAppLink(message), "_blank", "noopener,noreferrer");
+        window.open(buildWhatsAppLink(message, whatsappNumber), "_blank", "noopener,noreferrer");
       }}
     >
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { buildWhatsAppLink } from "@/lib/constants";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 
 const FOOTER_COLUMNS = [
   {
@@ -23,8 +24,9 @@ const FOOTER_COLUMNS = [
   },
 ];
 
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear();
+  const settings = await getSiteSettings();
 
   return (
     <footer className="bg-navy-950 text-cream-50/80">
@@ -36,7 +38,7 @@ export function Footer() {
               Portable power and backup energy for island life.
             </p>
             <a
-              href={buildWhatsAppLink("Hi ISLAND SOL, I have a question.")}
+              href={buildWhatsAppLink(settings.supportMessage, settings.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-turquoise-400 hover:text-turquoise-300"
@@ -64,7 +66,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col gap-4 border-t border-cream-50/10 pt-8 text-xs text-cream-50/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {year} ISLAND SOL. All rights reserved.</p>
+          <p>&copy; {year} {settings.businessName}. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/terms" className="hover:text-cream-50/70">
               Terms

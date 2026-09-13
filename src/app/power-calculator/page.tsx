@@ -1,6 +1,8 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PowerCalculator } from "@/components/calculator/PowerCalculator";
+import { getApplianceDefinitions } from "@/lib/data/appliances";
+import { getSolutions } from "@/lib/data/solutions";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -10,7 +12,9 @@ export const metadata = buildMetadata({
   path: "/power-calculator",
 });
 
-export default function PowerCalculatorPage() {
+export default async function PowerCalculatorPage() {
+  const [appliances, solutions] = await Promise.all([getApplianceDefinitions(), getSolutions()]);
+
   return (
     <div className="py-16 sm:py-20">
       <Container>
@@ -20,7 +24,7 @@ export default function PowerCalculatorPage() {
           subtitle="Tell us what you need to keep running and we'll help you find the right system."
         />
         <div className="mt-12">
-          <PowerCalculator />
+          <PowerCalculator appliances={appliances} solutions={solutions} />
         </div>
       </Container>
     </div>

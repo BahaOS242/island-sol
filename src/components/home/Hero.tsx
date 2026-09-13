@@ -2,10 +2,11 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { HeroProductVisual } from "@/components/home/HeroProductVisual";
-import { HERO_HEADLINE_DEFAULT } from "@/lib/data/heroVariants";
-import { PRIMARY_CTA, SECONDARY_CTA } from "@/lib/constants";
+import { getHeroConfig } from "@/lib/data/hero";
 
-export function Hero() {
+export async function Hero() {
+  const hero = await getHeroConfig();
+
   return (
     <section className="relative overflow-hidden bg-navy-950 text-cream-50">
       <div
@@ -31,35 +32,28 @@ export function Hero() {
       */}
       <Container className="relative grid grid-cols-1 items-center gap-12 py-16 sm:py-20 lg:grid-cols-2 lg:py-28">
         <div>
-          <Eyebrow>Power for Island Life</Eyebrow>
+          <Eyebrow>{hero.eyebrow}</Eyebrow>
 
           <h1 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-            {HERO_HEADLINE_DEFAULT.headline}
+            {hero.headline}
           </h1>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream-50/75">
-            Reliable portable power for homes, businesses, and everyday life in
-            The Bahamas — without the noise, fuel, or fumes of a traditional
-            generator.
-          </p>
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream-50/75">{hero.subheadline}</p>
 
           <div className="mt-8 lg:hidden">
             <HeroProductVisual />
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href={PRIMARY_CTA.href} variant="primary" size="lg">
-              Shop Power Stations
+            <Button href={hero.primaryCtaLink} variant="primary" size="lg">
+              {hero.primaryCtaLabel}
             </Button>
-            <Button href={SECONDARY_CTA.href} variant="secondary" size="lg" className="text-cream-50">
-              Find Your Power
+            <Button href={hero.secondaryCtaLink} variant="secondary" size="lg" className="text-cream-50">
+              {hero.secondaryCtaLabel}
             </Button>
           </div>
 
-          <p className="mt-6 text-sm font-medium tracking-wide text-cream-50/50">
-            Quiet <span className="mx-2 text-cream-50/25">•</span> Portable{" "}
-            <span className="mx-2 text-cream-50/25">•</span> Rechargeable
-          </p>
+          <p className="mt-6 text-sm font-medium tracking-wide text-cream-50/50">{hero.trustText}</p>
         </div>
 
         <div className="hidden lg:block">

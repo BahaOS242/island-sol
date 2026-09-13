@@ -8,12 +8,15 @@ import { Button } from "@/components/ui/Button";
  */
 export function WhatsAppLink({
   message,
+  number,
   children,
   variant = "secondary",
   size = "md",
   className = "",
 }: {
   message: string;
+  /** Real number from CMS Site Settings; falls back to the env-var default if omitted. */
+  number?: string;
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "ghost";
   size?: "md" | "lg";
@@ -21,7 +24,7 @@ export function WhatsAppLink({
 }) {
   return (
     <Button
-      href={buildWhatsAppLink(message)}
+      href={buildWhatsAppLink(message, number)}
       variant={variant}
       size={size}
       className={className}

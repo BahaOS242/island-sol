@@ -3,14 +3,13 @@ import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { MobileNav } from "@/components/layout/MobileNav";
-import { NAV_LINKS, PRIMARY_CTA } from "@/lib/constants";
+import { getNavigationItems } from "@/lib/data/navigation";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 
-export function Header() {
+export async function Header() {
+  const [navItems, settings] = await Promise.all([getNavigationItems(), getSiteSettings()]);
+
   return (
-    // Solid background (no backdrop-blur) on purpose: `backdrop-filter`
-    // creates a CSS containing block for `position: fixed` descendants,
-    // which trapped MobileNav's full-screen overlay inside the header's
-    // own box instead of the viewport.
     <header className="sticky top-0 z-30 bg-navy-950">
       <Container className="flex h-[72px] items-center justify-between">
         <Link href="/" className="shrink-0">
@@ -18,10 +17,10 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
+          {navItems.map((link) => (
             <Link
-              key={link.href}
-              href={link.href}
+              key={link.id}
+              href={link.url}
               className="text-sm font-medium text-cream-50/80 hover:text-cream-50 transition-colors"
             >
               {link.label}
@@ -30,12 +29,15 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Button href={PRIMARY_CTA.href} variant="primary" size="md">
-            {PRIMARY_CTA.label}
+          <Button href={settings.primaryCtaLink} variant="primary" size="md">
+            {settings.primaryCtaLabel}
           </Button>
         </div>
 
-        <MobileNav />
+        <MobileNav
+          navItems={navItems}
+          primaryCta={{ label: settings.primaryCtaLabel, href: settings.primaryCtaLink }}
+        />
       </Container>
     </header>
   );

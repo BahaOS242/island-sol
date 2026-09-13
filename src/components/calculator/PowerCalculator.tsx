@@ -3,13 +3,19 @@
 import { useMemo, useState } from "react";
 import { ApplianceRow } from "@/components/calculator/ApplianceRow";
 import { ResultCard } from "@/components/calculator/ResultCard";
-import { APPLIANCE_DEFINITIONS } from "@/lib/data/appliances";
 import { calculatePowerNeeds } from "@/lib/calculator/engine";
-import type { ApplianceCategory } from "@/lib/types/calculator";
+import type { ApplianceCategory, ApplianceDefinition } from "@/lib/types/calculator";
+import type { Solution } from "@/lib/types/product";
 
-type Selections = Partial<Record<ApplianceCategory, number>>;
+type Selections = Partial<Record<string, number>>;
 
-export function PowerCalculator() {
+export function PowerCalculator({
+  appliances,
+  solutions,
+}: {
+  appliances: ApplianceDefinition[];
+  solutions: Solution[];
+}) {
   const [selections, setSelections] = useState<Selections>({});
 
   const hasSelections = useMemo(
@@ -24,17 +30,17 @@ export function PowerCalculator() {
         applianceId: applianceId as ApplianceCategory,
         quantity: quantity ?? 0,
       }));
-    return calculatePowerNeeds(list);
-  }, [selections]);
+    return calculatePowerNeeds(list, appliances);
+  }, [selections, appliances]);
 
-  function updateQuantity(id: ApplianceCategory, next: number) {
+  function updateQuantity(id: string, next: number) {
     setSelections((prev) => ({ ...prev, [id]: next }));
   }
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {APPLIANCE_DEFINITIONS.map((appliance) => (
+        {appliances.map((appliance) => (
           <ApplianceRow
             key={appliance.id}
             appliance={appliance}
@@ -46,7 +52,7 @@ export function PowerCalculator() {
 
       <div className="lg:sticky lg:top-24">
         {hasSelections ? (
-          <ResultCard result={result} />
+          <ResultCard result={result} solutions={solutions} />
         ) : (
           <div className="rounded-3xl border border-dashed border-mist-300 p-8 text-center">
             <p className="text-sm text-slate-500">

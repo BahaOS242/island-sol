@@ -10,9 +10,9 @@ export function ProductCard({ product }: { product: Product }) {
       href={`/products/${product.slug}`}
       className="group flex flex-col overflow-hidden rounded-3xl border border-mist-200 bg-white transition-shadow hover:shadow-lg"
     >
-      {product.image ? (
+      {product.heroImage ? (
         <Image
-          src={product.image}
+          src={product.heroImage}
           alt={product.name}
           width={640}
           height={480}

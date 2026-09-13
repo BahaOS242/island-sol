@@ -1,14 +1,23 @@
-import type { ApplianceDefinition } from "@/lib/types/calculator";
+import { queryCollection } from "@/lib/wix/client";
+import type { ApplianceCategory, ApplianceDefinition } from "@/lib/types/calculator";
+
+interface RawAppliance {
+  applianceName?: string;
+  category?: string;
+  icon?: string;
+  estimatedRunningWatts?: number;
+  estimatedStartupWatts?: number;
+  typicalHours?: number;
+  active?: boolean;
+}
 
 /**
- * Typical wattage reference table used by the power calculator to produce
- * a rough estimate. These are generic, widely-published average figures
- * for the appliance category — not ISLAND SOL product specifications and
- * not a guarantee of any individual device's actual draw. The calculator
- * UI always surfaces a disclaimer alongside any result derived from this
- * table (see PowerCalculator's disclaimer copy).
+ * Fallback reference table used only if the CMS is unreachable or the
+ * `appliances` collection is empty, so the calculator never breaks. The
+ * CMS is the source of truth in normal operation — a business owner can
+ * add, remove, or re-tune these assumptions without a code change.
  */
-export const APPLIANCE_DEFINITIONS: ApplianceDefinition[] = [
+const FALLBACK_APPLIANCES: ApplianceDefinition[] = [
   { id: "refrigerator", label: "Refrigerator", icon: "fridge", typicalRunningWattage: 150, typicalSurgeWattage: 400, typicalDutyCycleHoursPerDay: 8 },
   { id: "tv", label: "TV", icon: "tv", typicalRunningWattage: 100, typicalSurgeWattage: 120, typicalDutyCycleHoursPerDay: 4 },
   { id: "wifi_router", label: "Wi-Fi Router", icon: "wifi", typicalRunningWattage: 10, typicalSurgeWattage: 15, typicalDutyCycleHoursPerDay: 24 },
@@ -23,6 +32,24 @@ export const APPLIANCE_DEFINITIONS: ApplianceDefinition[] = [
   { id: "other", label: "Other", icon: "plug", typicalRunningWattage: 100, typicalSurgeWattage: 150, typicalDutyCycleHoursPerDay: 4 },
 ];
 
-export function getApplianceDefinition(id: string) {
-  return APPLIANCE_DEFINITIONS.find((a) => a.id === id);
+export async function getApplianceDefinitions(): Promise<ApplianceDefinition[]> {
+  const items = await queryCollection<RawAppliance>("appliances");
+  const active = items.filter((item) => item.data.active ?? true);
+  if (active.length === 0) return FALLBACK_APPLIANCES;
+
+  return active.map((item) => ({
+    id: (item.data.category as ApplianceCategory) ?? "other",
+    label: item.data.applianceName ?? "Other",
+    icon: item.data.icon ?? "plug",
+    typicalRunningWattage: item.data.estimatedRunningWatts ?? 100,
+    typicalSurgeWattage: item.data.estimatedStartupWatts ?? 150,
+    typicalDutyCycleHoursPerDay: item.data.typicalHours ?? 4,
+  }));
+}
+
+export function findApplianceDefinition(
+  definitions: ApplianceDefinition[],
+  id: string
+): ApplianceDefinition | undefined {
+  return definitions.find((a) => a.id === id);
 }

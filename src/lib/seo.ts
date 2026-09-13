@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 import type { Product } from "@/lib/types/product";
+import type { SiteSettings } from "@/lib/data/siteSettings";
 
 /**
  * TODO(business): set the real production domain once deployed, and set
  * NEXT_PUBLIC_SITE_URL in the environment to match.
  */
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.islandsol.com";
+
+/**
+ * Used only for the `openGraph.siteName` on static pages that can't
+ * await CMS data (they export a plain `metadata` object, not
+ * `generateMetadata`). The root layout and any page using
+ * `generateMetadata` should prefer the real value from Site Settings.
+ */
+const SITE_NAME_FALLBACK = "ISLAND SOL";
 
 export function buildMetadata({
   title,
@@ -26,7 +34,7 @@ export function buildMetadata({
       title,
       description,
       url,
-      siteName: SITE_NAME,
+      siteName: SITE_NAME_FALLBACK,
       type: "website",
     },
     twitter: {
@@ -37,13 +45,15 @@ export function buildMetadata({
   };
 }
 
-export function organizationJsonLd() {
+export function organizationJsonLd(settings: SiteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: SITE_NAME,
+    name: settings.businessName,
     url: SITE_URL,
-    description: SITE_DESCRIPTION,
+    description: settings.defaultSeoDescription,
+    ...(settings.phone ? { telephone: settings.phone } : {}),
+    ...(settings.email ? { email: settings.email } : {}),
     areaServed: {
       "@type": "Country",
       name: "The Bahamas",
@@ -69,9 +79,9 @@ export function productJsonLd(product: Product) {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.shortDescription,
+    description: product.seoDescription || product.shortDescription,
     sku: product.productId,
-    ...(product.image ? { image: [product.image] } : {}),
+    ...(product.heroImage ? { image: [product.heroImage] } : {}),
     ...(product.price
       ? {
           offers: {

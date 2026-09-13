@@ -1,18 +1,25 @@
-import { getApplianceDefinition } from "@/lib/data/appliances";
-import type { ApplianceSelection, CalculatorResult } from "@/lib/types/calculator";
-import type { ProductTierId } from "@/lib/types/product";
+import type { ApplianceDefinition, ApplianceSelection, CalculatorResult } from "@/lib/types/calculator";
+
+function findApplianceDefinition(
+  definitions: ApplianceDefinition[],
+  id: string
+): ApplianceDefinition | undefined {
+  return definitions.find((a) => a.id === id);
+}
 
 /**
- * Recommendation thresholds. These map an estimated load to one of the
- * three product tiers. They are deliberately conservative and independent
- * of any specific product's real capacity (which isn't finalized yet) —
- * once real product specs exist, this can be swapped for a lookup against
- * actual product `continuousOutputW` / `capacityWh` values.
+ * Recommendation thresholds. These map an estimated load to a rough
+ * output "class" and severity tier (portable / home / pro), independent
+ * of any specific product's real capacity. The actual CMS category or
+ * solution to recommend is resolved by the caller (see
+ * severityToCategorySortOrder) by matching this tier's ordinal position
+ * against category sortOrder — so it still works if new categories are
+ * added, though a category reshuffle changes the mapping.
  */
-const TIER_THRESHOLDS: { tierId: ProductTierId; maxRunningWattage: number; maxDailyWh: number }[] = [
-  { tierId: "portable", maxRunningWattage: 300, maxDailyWh: 600 },
-  { tierId: "home_essentials", maxRunningWattage: 1200, maxDailyWh: 3500 },
-  { tierId: "pro_backup", maxRunningWattage: Infinity, maxDailyWh: Infinity },
+const TIER_THRESHOLDS: { tier: "low" | "medium" | "high"; maxRunningWattage: number; maxDailyWh: number }[] = [
+  { tier: "low", maxRunningWattage: 300, maxDailyWh: 600 },
+  { tier: "medium", maxRunningWattage: 1200, maxDailyWh: 3500 },
+  { tier: "high", maxRunningWattage: Infinity, maxDailyWh: Infinity },
 ];
 
 /** Rounds up to a recognizable output "class" for display purposes only. */
@@ -22,21 +29,21 @@ function roundUpToOutputClass(watts: number): number {
   return OUTPUT_CLASSES.find((c) => c >= watts) ?? OUTPUT_CLASSES[OUTPUT_CLASSES.length - 1];
 }
 
-export function calculatePowerNeeds(selections: ApplianceSelection[]): CalculatorResult {
+export function calculatePowerNeeds(
+  selections: ApplianceSelection[],
+  definitions: ApplianceDefinition[]
+): CalculatorResult {
   let totalRunningWattage = 0;
-  let totalSurgeContribution = 0;
   let estimatedDailyWh = 0;
   let largestRunning = 0;
   let largestSurgeDelta = 0;
 
   for (const selection of selections) {
-    const def = getApplianceDefinition(selection.applianceId);
+    const def = findApplianceDefinition(definitions, selection.applianceId);
     if (!def || selection.quantity <= 0) continue;
 
     const runningEach = selection.customWattage ?? def.typicalRunningWattage;
-    const surgeEach = selection.customWattage
-      ? selection.customWattage
-      : def.typicalSurgeWattage;
+    const surgeEach = selection.customWattage ? selection.customWattage : def.typicalSurgeWattage;
 
     const runningTotal = runningEach * selection.quantity;
     totalRunningWattage += runningTotal;
@@ -50,9 +57,9 @@ export function calculatePowerNeeds(selections: ApplianceSelection[]): Calculato
   // Worst-case simultaneous surge: total running load plus the single
   // largest appliance's extra surge draw (surges rarely stack across
   // multiple appliances at once).
-  totalSurgeContribution = totalRunningWattage + largestSurgeDelta;
+  const totalSurgeContribution = totalRunningWattage + largestSurgeDelta;
 
-  const tier =
+  const matchedTier =
     TIER_THRESHOLDS.find(
       (t) => totalRunningWattage <= t.maxRunningWattage && estimatedDailyWh <= t.maxDailyWh
     ) ?? TIER_THRESHOLDS[TIER_THRESHOLDS.length - 1];
@@ -61,7 +68,16 @@ export function calculatePowerNeeds(selections: ApplianceSelection[]): Calculato
     totalRunningWattage: Math.round(totalRunningWattage),
     totalSurgeWattage: Math.round(totalSurgeContribution),
     estimatedDailyWh: Math.round(estimatedDailyWh),
-    recommendedTierId: tier.tierId,
+    recommendedTier: matchedTier.tier,
     recommendedOutputClassW: roundUpToOutputClass(totalSurgeContribution),
   };
+}
+
+/**
+ * Maps an abstract severity tier to a 1-based ordinal position — pair
+ * this with CMS categories/solutions sorted by sortOrder to pick which
+ * one to recommend (position 1 = low, 2 = medium, 3+ = high).
+ */
+export function severityToOrdinal(tier: "low" | "medium" | "high"): number {
+  return tier === "low" ? 1 : tier === "medium" ? 2 : 3;
 }

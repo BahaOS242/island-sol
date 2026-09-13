@@ -1,42 +1,45 @@
 /**
- * Product data model.
+ * Product data model — mirrors the `products` Wix Data collection exactly
+ * (see src/lib/data/products.ts for the fetch/mapping layer).
  *
- * Mirrors the shape this data will take once it lives in a real Wix
- * CMS/Stores collection (see PHASE 4 in the implementation report).
- * `landedCost` and `supplier` intentionally do NOT exist on this client-side
- * type — that data must never reach the browser and stays server-side only
- * once a real backend is connected.
+ * Internal fields such as supplier, supplier cost, landed cost, and
+ * margin live in the separate, admin-only `product-internal` collection
+ * and are never modeled here — this type is what the client is allowed
+ * to see.
  */
 
 export type StockStatus = "in_stock" | "low_stock" | "out_of_stock" | "preorder" | "unknown";
 
 export type ChargingMethod = "wall_outlet" | "solar_panel" | "car_charger" | "generator";
 
-export type ProductTierId = "portable" | "home_essentials" | "pro_backup";
-
-export interface ProductSpecification {
-  label: string;
-  value: string;
-}
-
 export interface Money {
   amount: number;
   currency: "USD" | "BSD";
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  sortOrder: number;
+  active: boolean;
 }
 
 export interface Product {
   productId: string;
   slug: string;
   name: string;
-  tierId: ProductTierId;
   shortDescription: string;
   longDescription: string;
+  heroImage: string | null;
+  gallery: string[];
   /** Null = price not yet configured. UI must fall back to "Request pricing". */
   price: Money | null;
   compareAtPrice: Money | null;
   stockStatus: StockStatus;
-  image: string | null;
-  gallery: string[];
+  featured: boolean;
+  categoryId: string | null;
   /** Null = spec not yet available. Never invent a number here. */
   capacityWh: number | null;
   continuousOutputW: number | null;
@@ -49,19 +52,29 @@ export interface Product {
   idealFor: string[];
   features: string[];
   useCaseIds: string[];
-  active: boolean;
-  featured: boolean;
   sortOrder: number;
-  /** True while this record is scaffold/placeholder data, not real catalog data. */
+  seoTitle: string | null;
+  seoDescription: string | null;
+  canonicalSlug: string | null;
+  active: boolean;
+  /** True while this record is placeholder catalog data, not a real SKU. */
   isPlaceholder: boolean;
 }
 
-export interface ProductTier {
-  tierId: ProductTierId;
-  name: string;
-  eyebrow: string;
+export interface Solution {
+  id: string;
+  solutionName: string;
+  slug: string;
+  headline: string;
   description: string;
-  poweredExamples: string[];
-  ctaLabel: string;
-  ctaHref: string;
+  image: string | null;
+  icon: string | null;
+  recommendedProductIds: string[];
+  idealCustomer: string;
+  commonAppliances: string[];
+  featured: boolean;
+  sortOrder: number;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  active: boolean;
 }

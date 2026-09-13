@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
+import { SiteSettingsProvider } from "@/lib/site-settings-context";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 import { SITE_URL, organizationJsonLd } from "@/lib/seo";
 
 const geistSans = Geist({
@@ -16,20 +17,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} — Portable Power & Backup Energy for The Bahamas`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  openGraph: {
-    siteName: SITE_NAME,
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: settings.defaultSeoTitle,
+      template: `%s | ${settings.businessName}`,
+    },
+    description: settings.defaultSeoDescription,
+    openGraph: {
+      siteName: settings.businessName,
+      type: "website",
+      ...(settings.defaultOgImage ? { images: [settings.defaultOgImage] } : {}),
+    },
+  };
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const settings = await getSiteSettings();
+
   return (
     <html
       lang="en"
@@ -38,11 +45,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-cream-50 text-ink">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(settings)) }}
         />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteSettingsProvider settings={settings}>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SiteSettingsProvider>
       </body>
     </html>
   );

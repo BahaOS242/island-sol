@@ -1,13 +1,7 @@
 import { Container } from "@/components/ui/Container";
+import { getTrustItems } from "@/lib/data/trustItems";
 
-const ITEMS = [
-  { title: "Quiet Power", description: "No engine noise.", icon: "volume" },
-  { title: "No Fuel", description: "Recharge instead of refueling.", icon: "bolt" },
-  { title: "Portable", description: "Take your power with you.", icon: "case" },
-  { title: "Island Ready", description: "Designed around real-world island needs.", icon: "shield" },
-] as const;
-
-function Icon({ name }: { name: (typeof ITEMS)[number]["icon"] }) {
+function Icon({ name }: { name: string }) {
   const common = { width: 20, height: 20, viewBox: "0 0 20 20", fill: "none" } as const;
   switch (name) {
     case "volume":
@@ -15,12 +9,6 @@ function Icon({ name }: { name: (typeof ITEMS)[number]["icon"] }) {
         <svg {...common} aria-hidden="true">
           <path d="M3 7h3l4-3v12l-4-3H3V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
           <path d="M14 7.5c1 1.2 1 4 0 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      );
-    case "bolt":
-      return (
-        <svg {...common} aria-hidden="true">
-          <path d="M11 2 4 12h5l-1 6 7-10h-5l1-6Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
         </svg>
       );
     case "case":
@@ -36,15 +24,25 @@ function Icon({ name }: { name: (typeof ITEMS)[number]["icon"] }) {
           <path d="M10 2.5 16 5v5c0 4-2.7 6.5-6 7.5-3.3-1-6-3.5-6-7.5V5l6-2.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
         </svg>
       );
+    case "bolt":
+    default:
+      return (
+        <svg {...common} aria-hidden="true">
+          <path d="M11 2 4 12h5l-1 6 7-10h-5l1-6Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+      );
   }
 }
 
-export function TrustStrip() {
+export async function TrustStrip() {
+  const items = await getTrustItems();
+  if (items.length === 0) return null;
+
   return (
     <section className="border-b border-mist-200 bg-cream-50">
       <Container className="grid grid-cols-2 gap-8 py-10 sm:grid-cols-4">
-        {ITEMS.map((item) => (
-          <div key={item.title} className="flex items-start gap-3">
+        {items.map((item) => (
+          <div key={item.id} className="flex items-start gap-3">
             <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy-950 text-gold-500">
               <Icon name={item.icon} />
             </span>

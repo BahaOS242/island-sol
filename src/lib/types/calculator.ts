@@ -1,7 +1,5 @@
 /** Power calculator / recommendation-engine data models. */
 
-import type { ProductTierId } from "./product";
-
 export type ApplianceCategory =
   | "refrigerator"
   | "tv"
@@ -17,10 +15,11 @@ export type ApplianceCategory =
   | "other";
 
 /**
- * Typical wattage reference ranges used ONLY to produce a rough estimate.
- * These are generic, publicly-known appliance wattage ranges (not
- * ISLAND SOL product specifications, not guarantees). Always shown to the
- * customer alongside a disclaimer — see PowerCalculator's disclaimer copy.
+ * Typical wattage reference values, sourced from the CMS `appliances`
+ * collection (src/lib/data/appliances.ts) — used ONLY to produce a rough
+ * estimate. These are not ISLAND SOL product specifications or
+ * guarantees. Always shown to the customer alongside a disclaimer — see
+ * PowerCalculator's disclaimer copy.
  */
 export interface ApplianceDefinition {
   id: ApplianceCategory;
@@ -43,6 +42,6 @@ export interface CalculatorResult {
   totalRunningWattage: number;
   totalSurgeWattage: number;
   estimatedDailyWh: number;
-  recommendedTierId: ProductTierId;
+  recommendedTier: "low" | "medium" | "high";
   recommendedOutputClassW: number;
 }

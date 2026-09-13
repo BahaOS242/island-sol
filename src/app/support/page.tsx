@@ -2,7 +2,8 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WhatsAppLink } from "@/components/whatsapp/WhatsAppLink";
 import { QuoteForm } from "@/components/forms/QuoteForm";
-import { FAQ_ITEMS } from "@/lib/data/faq";
+import { getFaqItems } from "@/lib/data/faq";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -11,8 +12,9 @@ export const metadata = buildMetadata({
   path: "/support",
 });
 
-export default function SupportPage() {
-  const supportFaqs = FAQ_ITEMS.filter((f) => f.category === "support" || f.category === "general");
+export default async function SupportPage() {
+  const [allFaqs, settings] = await Promise.all([getFaqItems(), getSiteSettings()]);
+  const supportFaqs = allFaqs.filter((f) => f.category === "support" || f.category === "general");
 
   return (
     <div className="py-16 sm:py-20">
@@ -24,7 +26,7 @@ export default function SupportPage() {
         />
 
         <div className="mt-8">
-          <WhatsAppLink message="Hi ISLAND SOL, I have a question." variant="primary" size="lg">
+          <WhatsAppLink message={settings.supportMessage} number={settings.whatsapp} variant="primary" size="lg">
             Chat on WhatsApp
           </WhatsAppLink>
         </div>
@@ -32,7 +34,7 @@ export default function SupportPage() {
         <div className="mt-14 rounded-3xl border border-mist-200 bg-white p-8 sm:p-10">
           <h2 className="text-xl font-bold tracking-tight text-ink">Request a Quote</h2>
           <div className="mt-6">
-            <QuoteForm />
+            <QuoteForm whatsappNumber={settings.whatsapp} />
           </div>
         </div>
 

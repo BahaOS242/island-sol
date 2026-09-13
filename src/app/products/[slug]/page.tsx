@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { WhatsAppLink } from "@/components/whatsapp/WhatsAppLink";
 import { ProductImagePlaceholder } from "@/components/product/ProductImagePlaceholder";
 import { getProductBySlug, getProducts } from "@/lib/data/products";
-import { getTierById } from "@/lib/data/tiers";
+import { getCategories } from "@/lib/data/categories";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 import { formatMoney } from "@/lib/format";
 import { breadcrumbJsonLd, buildMetadata, productJsonLd } from "@/lib/seo";
 
@@ -31,9 +32,9 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
   if (!product) return {};
   return buildMetadata({
-    title: product.name,
-    description: product.shortDescription,
-    path: `/products/${product.slug}`,
+    title: product.seoTitle || product.name,
+    description: product.seoDescription || product.shortDescription,
+    path: `/products/${product.canonicalSlug || product.slug}`,
   });
 }
 
@@ -43,10 +44,14 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, categories, settings] = await Promise.all([
+    getProductBySlug(slug),
+    getCategories(),
+    getSiteSettings(),
+  ]);
   if (!product) notFound();
 
-  const tier = getTierById(product.tierId);
+  const category = categories.find((c) => c.id === product.categoryId);
 
   return (
     <div className="py-16 sm:py-20">
@@ -71,9 +76,9 @@ export default async function ProductDetailPage({
         {/* Above the fold */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
-            {product.image ? (
+            {product.heroImage ? (
               <Image
-                src={product.image}
+                src={product.heroImage}
                 alt={product.name}
                 width={800}
                 height={600}
@@ -86,9 +91,9 @@ export default async function ProductDetailPage({
           </div>
 
           <div>
-            {tier ? (
+            {category ? (
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-turquoise-600">
-                {tier.name}
+                {category.name}
               </p>
             ) : null}
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -111,6 +116,7 @@ export default async function ProductDetailPage({
               </Button>
               <WhatsAppLink
                 message={`Hi ISLAND SOL, I'm interested in the ${product.name}. Can you tell me more?`}
+                number={settings.whatsapp}
                 variant="secondary"
                 className="text-ink"
               >
@@ -200,6 +206,7 @@ export default async function ProductDetailPage({
           </p>
           <WhatsAppLink
             message={`Hi ISLAND SOL, I have a question about the ${product.name}.`}
+            number={settings.whatsapp}
             variant="primary"
             className="mt-6"
           >

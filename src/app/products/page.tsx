@@ -4,9 +4,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ComparisonTable } from "@/components/product/ComparisonTable";
 import { getProducts } from "@/lib/data/products";
-import { PRODUCT_TIERS, getTierById } from "@/lib/data/tiers";
+import { getCategories } from "@/lib/data/categories";
 import { buildMetadata } from "@/lib/seo";
-import type { ProductTierId } from "@/lib/types/product";
 
 export const metadata = buildMetadata({
   title: "Portable Power Stations — The Bahamas",
@@ -18,12 +17,12 @@ export const metadata = buildMetadata({
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tier?: string }>;
+  searchParams: Promise<{ category?: string }>;
 }) {
-  const { tier } = await searchParams;
-  const allProducts = await getProducts();
-  const activeTier = tier && getTierById(tier) ? (tier as ProductTierId) : null;
-  const products = activeTier ? allProducts.filter((p) => p.tierId === activeTier) : allProducts;
+  const { category } = await searchParams;
+  const [allProducts, categories] = await Promise.all([getProducts(), getCategories()]);
+  const activeCategory = category && categories.some((c) => c.id === category) ? category : null;
+  const products = activeCategory ? allProducts.filter((p) => p.categoryId === activeCategory) : allProducts;
 
   return (
     <div className="py-16 sm:py-20">
@@ -38,20 +37,20 @@ export default async function ProductsPage({
           <Link
             href="/products"
             className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-              !activeTier ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
+              !activeCategory ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
             }`}
           >
             All
           </Link>
-          {PRODUCT_TIERS.map((t) => (
+          {categories.map((c) => (
             <Link
-              key={t.tierId}
-              href={`/products?tier=${t.tierId}`}
+              key={c.id}
+              href={`/products?category=${c.id}`}
               className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-                activeTier === t.tierId ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
+                activeCategory === c.id ? "border-navy-950 bg-navy-950 text-cream-50" : "border-mist-300 text-ink"
               }`}
             >
-              {t.name}
+              {c.name}
             </Link>
           ))}
         </div>
@@ -62,7 +61,7 @@ export default async function ProductsPage({
           ))}
         </div>
 
-        {!activeTier && allProducts.length > 0 ? (
+        {!activeCategory && allProducts.length > 0 ? (
           <div className="mt-20">
             <SectionHeading title="COMPARE SYSTEMS" className="mb-8" />
             <ComparisonTable products={allProducts} />

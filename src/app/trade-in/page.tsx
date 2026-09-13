@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TradeInForm } from "@/components/forms/TradeInForm";
+import { getSiteSettings } from "@/lib/data/siteSettings";
 import { buildMetadata } from "@/lib/seo";
 
 const STEPS = [
@@ -15,7 +16,8 @@ export const metadata = buildMetadata({
   path: "/trade-in",
 });
 
-export default function TradeInPage() {
+export default async function TradeInPage() {
+  const settings = await getSiteSettings();
   return (
     <div className="py-16 sm:py-20">
       <Container className="max-w-4xl">
@@ -38,7 +40,7 @@ export default function TradeInPage() {
         <div className="mt-14 rounded-3xl border border-mist-200 bg-white p-8 sm:p-10">
           <h2 className="text-xl font-bold tracking-tight text-ink">Start a Trade-In</h2>
           <div className="mt-6">
-            <TradeInForm />
+            <TradeInForm whatsappNumber={settings.whatsapp} />
           </div>
         </div>
       </Container>

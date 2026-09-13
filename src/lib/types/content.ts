@@ -5,6 +5,7 @@ export interface UseCase {
   title: string;
   description: string;
   image: string | null;
+  sortOrder: number;
 }
 
 export interface Testimonial {
@@ -14,13 +15,15 @@ export interface Testimonial {
   authorLocation: string | null;
   rating: number | null;
   productSlug: string | null;
+  sortOrder: number;
 }
 
 export interface FaqItem {
   id: string;
   question: string;
   answer: string;
-  category: "general" | "product" | "calculator" | "trade_in" | "support";
+  category: string;
+  sortOrder: number;
 }
 
 export interface ComparisonRow {

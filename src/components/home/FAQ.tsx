@@ -1,15 +1,18 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FAQ_ITEMS } from "@/lib/data/faq";
+import { getFaqItems } from "@/lib/data/faq";
 
-export function FAQ() {
+export async function FAQ() {
+  const items = await getFaqItems();
+  if (items.length === 0) return null;
+
   return (
     <section className="bg-cream-100 py-20 sm:py-28">
       <Container className="max-w-3xl">
         <SectionHeading title="FREQUENTLY ASKED QUESTIONS" align="center" className="mx-auto" />
 
         <div className="mt-10 divide-y divide-mist-300 rounded-3xl border border-mist-200 bg-white">
-          {FAQ_ITEMS.map((item) => (
+          {items.map((item) => (
             <details key={item.id} className="group p-6 open:bg-cream-50/60">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-ink">
                 {item.question}

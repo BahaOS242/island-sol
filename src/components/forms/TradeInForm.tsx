@@ -13,7 +13,7 @@ import { buildWhatsAppLink } from "@/lib/constants";
  * to the TradeInRequest collection once the Wix backend is connected —
  * the form fields already match that data model 1:1.
  */
-export function TradeInForm() {
+export function TradeInForm({ whatsappNumber }: { whatsappNumber?: string }) {
   const [form, setForm] = useState({
     name: "",
     contact: "",
@@ -42,7 +42,7 @@ export function TradeInForm() {
       className="space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
-        window.open(buildWhatsAppLink(message), "_blank", "noopener,noreferrer");
+        window.open(buildWhatsAppLink(message, whatsappNumber), "_blank", "noopener,noreferrer");
       }}
     >
       <FormField label="Name" htmlFor="ti-name" required>

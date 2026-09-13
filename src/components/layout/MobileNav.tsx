@@ -2,10 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { NAV_LINKS, PRIMARY_CTA, SECONDARY_CTA, buildWhatsAppLink } from "@/lib/constants";
+import { SECONDARY_CTA, buildWhatsAppLink } from "@/lib/constants";
+import { useSiteSettings } from "@/lib/site-settings-context";
+import type { NavigationItem } from "@/lib/data/navigation";
 
-export function MobileNav() {
+export function MobileNav({
+  navItems,
+  primaryCta,
+}: {
+  navItems: NavigationItem[];
+  primaryCta: { label: string; href: string };
+}) {
   const [open, setOpen] = useState(false);
+  const settings = useSiteSettings();
 
   return (
     <div className="md:hidden">
@@ -30,11 +39,11 @@ export function MobileNav() {
         <div className="fixed inset-0 z-40 flex flex-col bg-navy-950 px-6 pt-24 pb-10">
           <div className="flex flex-col gap-1">
             <Link
-              href={PRIMARY_CTA.href}
+              href={primaryCta.href}
               onClick={() => setOpen(false)}
               className="rounded-2xl bg-gold-500 px-5 py-4 text-center text-base font-bold uppercase tracking-wide text-navy-950"
             >
-              {PRIMARY_CTA.label}
+              {primaryCta.label}
             </Link>
             <Link
               href={SECONDARY_CTA.href}
@@ -44,7 +53,7 @@ export function MobileNav() {
               {SECONDARY_CTA.label}
             </Link>
             <a
-              href={buildWhatsAppLink("Hi ISLAND SOL, I have a question.")}
+              href={buildWhatsAppLink("Hi ISLAND SOL, I have a question.", settings.whatsapp)}
               onClick={() => setOpen(false)}
               target="_blank"
               rel="noopener noreferrer"
@@ -55,10 +64,10 @@ export function MobileNav() {
           </div>
 
           <nav className="mt-10 flex flex-col divide-y divide-cream-50/10 border-t border-b border-cream-50/10">
-            {NAV_LINKS.map((link) => (
+            {navItems.map((link) => (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.id}
+                href={link.url}
                 onClick={() => setOpen(false)}
                 className="py-4 text-lg font-medium text-cream-50/90"
               >
